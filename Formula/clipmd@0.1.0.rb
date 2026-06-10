@@ -5,15 +5,9 @@ class ClipmdAT010 < Formula
   sha256 "f41ebeb421cf204bd79a27560c4d4c841b033963f0a22a80c7aaa6aff813335f"
   license "MIT"
 
-  MIN_ZIG = "0.16.0".freeze
-
-  depends_on "zig" => :build
+  depends_on "zig@0.16" => :build
 
   def install
-    zig_version = Utils.safe_popen_read("zig", "version").strip
-    if Gem::Version.new(zig_version) < Gem::Version.new(MIN_ZIG)
-      odie "clipmd requires Zig #{MIN_ZIG} or newer (found #{zig_version})"
-    end
     system "zig", "build", "-Doptimize=ReleaseFast", "--prefix", prefix
   end
 
