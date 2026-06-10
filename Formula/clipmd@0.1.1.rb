@@ -11,6 +11,14 @@ class ClipmdAT011 < Formula
     system "zig", "build", "-Doptimize=ReleaseFast", "--prefix", prefix
   end
 
+  service do
+    run [opt_bin/"clipmd", "daemon"]
+    run_type :immediate
+    keep_alive true
+    log_path var/"log/clipmd.log"
+    error_log_path var/"log/clipmd.log"
+  end
+
   test do
     assert_match "clipmd", shell_output("#{bin}/clipmd version")
   end

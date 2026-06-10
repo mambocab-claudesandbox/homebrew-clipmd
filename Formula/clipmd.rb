@@ -15,6 +15,18 @@ class Clipmd < Formula
     system "zig", "build", "-Doptimize=ReleaseFast", "--prefix", prefix
   end
 
+  # `brew services start clipmd` installs this as a per-user LaunchAgent so
+  # the menu bar item + global hotkey come back automatically at login. It
+  # has to be a user-level agent (not a system daemon) because clipmd talks
+  # to AppKit/WindowServer.
+  service do
+    run [opt_bin/"clipmd", "daemon"]
+    run_type :immediate
+    keep_alive true
+    log_path var/"log/clipmd.log"
+    error_log_path var/"log/clipmd.log"
+  end
+
   test do
     assert_match "clipmd", shell_output("#{bin}/clipmd version")
   end
